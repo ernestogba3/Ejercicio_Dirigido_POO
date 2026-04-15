@@ -118,7 +118,7 @@ class Personaje{
     #vida = 200;
     constructor(nombre,vida){
         this.nombre=nombre;
-        this.#vida=vida;
+        this.#vida=vida <0 ? 0 : vida;
     }
 
     atacar(){
@@ -126,69 +126,63 @@ class Personaje{
     }
 
     recibirDaño(cantidad){
+
+        this.#vida-=cantidad;
+
         if(this.#vida <=0){
             console.log("Has muerto...");
+            this.#vida=0;
             return;
         }
-        this.#vida -=cantidad;
-        console.log(`Has recibido: ${cantidad} de daño, tu vida restante es: ${this.vida}`);
+        console.log(`Has recibido: ${cantidad} de daño, tu vida restante es: ${this.#vida}`);
     }
 
     estaVivo(){
-        if(this.#vida>0){
-            return true;
-        }else{
-            return false;
-        }
+        return this.#vida >0;
     }
 }
 
 class Guerrero extends Personaje{
     constructor(nombre,vida,ataque){
         super(nombre,vida);
-        this.nombre=nombre;
-        this.vida=vida;
+        
         this.ataque=ataque;
     }
 
     atacar(){
         console.log("Esta atacando el guerrero");
+        this.ataqueEspecial();
+
     }
-    ataqueEspecial(ataque){
-        console.log(`El guerrero te esta atacando y te hace: ${ataque} de daño especial...`);
+    ataqueEspecial(){
+        console.log(`El guerrero ataca y te hace: ${this.ataque} de daño especial...`);
     }
 }
 
 class Mago extends Personaje{
     constructor(nombre,vida,mana){
         super(nombre,vida);
-        this.nombre=nombre;
-        this.vida=vida;
         this.mana=mana;
     }
 
     atacar(){
+        console.log("El mago esta cargando el hechizo...");
         this.lanzaHechizo();
     }
 
-    lanzaHechizo(mana){
-        console.log(`El mago lanza ThunderShock y ha consumido: ${mana}`);
+    lanzaHechizo(){
+        console.log(`El mago lanza ThunderShock y ha consumido: ${this.mana} de mana`);
     }
 }
 
-const personajes = [Guerrero, Mago];
-
-let warrior = new Guerrero("Ernesto",200,50);
-warrior.atacar();
-warrior.ataqueEspecial(300);
-
-let wizard = new Mago("Merlin",100,50);
-wizard.lanzaHechizo(20);
-wizard.atacar();
-
-personajes.forEach(p => p.atacar());
-
-
-
-
+//Creo los objetos
+const arturo = new Guerrero("Arturo", 150, 40);
+const merlin = new Mago("Merlín", 80, 100);
+//Lo meto en un array para poder iniciarlo en un bucle foreach
+const equipo = [arturo, merlin];
+//Creo el bucle y muestro por pantalla
+console.log("--- COMIENZA EL COMBATE ---");
+equipo.forEach(personaje => {
+    personaje.atacar(); 
+});
 //Fin reto final
